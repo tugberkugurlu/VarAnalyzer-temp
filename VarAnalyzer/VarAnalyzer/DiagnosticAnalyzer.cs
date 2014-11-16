@@ -35,8 +35,8 @@ namespace VarAnalyzer
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             VariableDeclarationSyntax variableDecleration = (VariableDeclarationSyntax)context.Node;
-            IdentifierNameSyntax identifierNameSyntax = (IdentifierNameSyntax)variableDecleration.Type;
-            if (identifierNameSyntax.IsVar)
+            var typeSyntax = (TypeSyntax)variableDecleration.Type;
+            if (typeSyntax.IsVar)
             {
                 foreach (VariableDeclaratorSyntax variable in variableDecleration.Variables)
                 {
@@ -47,7 +47,7 @@ namespace VarAnalyzer
                         ITypeSymbol variableType = context.SemanticModel.GetTypeInfo(variableTypeName).ConvertedType;
                         if(variableType.IsAnonymousType == false)
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, identifierNameSyntax.GetLocation()));
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, typeSyntax.GetLocation()));
                         }
                     }
                 }
